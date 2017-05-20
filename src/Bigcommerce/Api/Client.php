@@ -413,7 +413,6 @@ class Client
     {
         $context = array_merge(array('grant_type' => 'authorization_code'), (array)$object);
         $connection = new Connection();
-        $connection->useUrlEncoded();
 
         return $connection->post(self::$login_url . '/oauth2/token', $context);
     }
@@ -1888,5 +1887,129 @@ class Client
             '/options/' . $optionId . '/values/' . $optionValueId,
             $object
         );
+    }
+    
+    /**
+     * Returns all webhooks.
+     *
+     * @return mixed Resource|string resource object or XML string if useXml is true
+     */
+    public static function listWebhooks()
+    {
+        return self::getCollection('/hooks');
+    }
+    
+    /**
+     * Returns data for a specific web-hook.
+     *
+     * @param int $id
+     * @return mixed Resource|string resource object or XML string if useXml is true
+     */
+    public static function getWebhook($id)
+    {
+        return self::getResource('/hooks/' . $id);
+    }
+    
+    /**
+     * Creates a web-hook.
+     *
+     * @param mixed $object object or XML string to create
+     * @return mixed
+     */
+    public static function createWebhook($object)
+    {
+        return self::createResource('/hooks', $object);
+    }
+    
+    /**
+     * Updates the given webhook.
+     *
+     * @param int $id
+     * @param mixed $object object or XML string to create
+     * @return mixed
+     */
+    public static function updateWebhook($id, $object)
+    {
+        return self::updateResource('/hooks/' . $id, $object);
+    }
+    
+    /**
+     * Delete the given webhook.
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public static function deleteWebhook($id)
+    {
+        return self::deleteResource('/hooks/' . $id);
+    }
+
+    /**
+     * Return a collection of shipping-zones
+     *
+     * @return mixed
+     */
+    public static function getShippingZones()
+    {
+        return self::getCollection('/shipping/zones/', 'ShippingZone');
+    }
+
+    /**
+     * Return a shipping-zone by id
+     *
+     * @param int $id shipping-zone id
+     * @return mixed
+     */
+    public static function getShippingZone($id)
+    {
+        return self::getResource('/shipping/zones/' . $id, 'ShippingZone');
+    }
+
+
+    /**
+     * Delete the given shipping-zone
+     *
+     * @param int $id shipping-zone id
+     * @return mixed
+     */
+    public static function deleteShippingZone($id)
+    {
+        return self::deleteResource('/shipping/zones/' . $id);
+    }
+
+    /**
+     * Return a shipping-method by id
+     *
+     * @param $zoneId
+     * @param $methodId
+     * @return mixed
+     */
+    public static function getShippingMethod($zoneId, $methodId)
+    {
+        return self::getResource('/shipping/zones/'. $zoneId . '/methods/'. $methodId, 'ShippingMethod');
+    }
+
+    /**
+     * Return a collection of shipping-methods
+     *
+     * @param $zoneId
+     * @return mixed
+     */
+    public static function getShippingMethods($zoneId)
+    {
+        return self::getCollection('/shipping/zones/' . $zoneId . '/methods', 'ShippingMethod');
+    }
+
+
+    /**
+     * Delete the given shipping-method by id
+     *
+     * @param $zoneId
+     * @param $methodId
+     * @return mixed
+     */
+    public static function deleteShippingMethod($zoneId, $methodId)
+    {
+        return self::deleteResource('/shipping/zones/'. $zoneId . '/methods/'. $methodId);
     }
 }
